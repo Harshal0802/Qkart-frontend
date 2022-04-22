@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { config } from "../App";
 import Footer from "./Footer";
 import Header from "./Header";
+import {Link} from "react-router-dom";
 import "./Register.css";
 
 
@@ -168,7 +169,7 @@ const Register = () => {
             onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
           />
            {loading === true ? (
-           <Box sx={{ display: "flex" }}>
+           <Box>
               <CircularProgress />
            </Box>
           ):(
@@ -178,9 +179,9 @@ const Register = () => {
           )}
           <p className="secondary-action">
             Already have an account?{" "}
-             <a className="link" href="#">
+             <Link className="link" to="/login">
               Login here
-             </a>
+             </Link>
           </p>
         </Stack>
       </Box>
