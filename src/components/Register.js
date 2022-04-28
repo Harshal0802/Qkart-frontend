@@ -11,6 +11,7 @@ import "./Register.css";
 
 
 const Register = () => {
+  debugger;
   const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
   const formInit = {
@@ -56,10 +57,10 @@ const Register = () => {
         {
           setFormData(formInit);
           setLoadingState(false);
-          history.push("/login");
-          return enqueueSnackbar("Registered Successfully",{
+          enqueueSnackbar("Registered Successfully",{
             variant: "success",
           });
+          history.push("/login");
         }
         return response.json({success: "true"});
       }catch (error) {
@@ -132,7 +133,7 @@ const Register = () => {
       justifyContent="space-between"
       minHeight="100vh"
     >
-      <Header hasHiddenAuthButtons={true} />
+      <Header hasHiddenAuthButtons />
       <Box className="content">
         <Stack spacing={2} className="form">
           <h2 className="title">Register</h2>

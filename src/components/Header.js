@@ -2,30 +2,19 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Avatar, Button, Stack } from "@mui/material";
 import Box from "@mui/material/Box";
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import "./Header.css";
 
 const Header = ({ children, hasHiddenAuthButtons }) => {
-  const history = useHistory();
- 
-  if(hasHiddenAuthButtons === true){
-    <Box className="header">
-         <Box className="header-title">
-             <img src="logo_light.svg" alt="QKart-icon"></img>
-         </Box>
+  const history= useHistory();
 
-         <Link className="link" to="/">
-           <Button
-            className="explore-button"
-            startIcon={<ArrowBackIcon />}
-            variant="text"
-            onClick={() => history.push("/")}
-          >
-            Back to explore
-          </Button>
-        </Link>
-       </Box> 
-  }
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("balance");
+    history.push("/");
+    window.location.reload();
+  };  
 
   return (
     <Box className="header">
@@ -34,51 +23,46 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
       </Box>
       {children}
       <Stack direction="row" spacing={1} alignItems="center">
-      {localStorage.getItem("username") ? (
+        {localStorage.getItem("username") ? (
         <>
           <Avatar alt={localStorage.getItem("username")} src="avatar.png" />
-          <p className="username-text"> {localStorage.getItem("username")}</p>
-          <Link 
-            className="link">
-              <Button 
+          <p className="username-text">{localStorage.getItem("username")}</p>
+              <Button
+                className="explore-button" 
                 variant="text" 
-                onClick={() => {
-                    localStorage.removeItem("username");
-                    localStorage.removeItem("balance");
-                    localStorage.removeItem("token");
-                    history.push("/");
-                    window.location.reload();
-                }}
+                onClick={logout}
               >
                 logout
               </Button>
-          </Link>
         </>
-      ) : (
+      ) : ( hasHiddenAuthButtons ? (
         <>
-          <Link 
-            className="link"
+           <Button
+            className="explore-button"
+            startIcon={<ArrowBackIcon />}
+            variant="text"
+            role="button"
+            onClick={() => history.push("/")}
           >
-            <Button 
-              className="explore-button" 
-              variant="text"
-              onClick={()=> {history.push("/login")}}
-            >
-                Login
-            </Button>
-          </Link>
-          <Link 
-            className="link"
-            >
-              <Button 
-                variant="contained" 
-                color="success"
-                onClick={()=> {history.push("/register")}}
-              >
-                Register
-              </Button>
-          </Link>
-        </>
+            Back to explore
+          </Button>
+        </>  
+      ) : <>
+      <Button 
+        className="explore-button" 
+        variant="text"
+        onClick={() => history.push("/login")}
+      >
+          Login
+      </Button>
+        <Button 
+          variant="contained" 
+          color="success"
+          onClick={() => history.push("/register")}
+        >
+          Register
+        </Button>
+        </>  
       )}
       </Stack>
     </Box>

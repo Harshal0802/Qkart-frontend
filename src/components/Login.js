@@ -53,7 +53,7 @@ const Login = () => {
             enqueueSnackbar("Logged in successfully",{
               variant: "success",
             });
-            return history.push("/");
+            history.push("/");
           }
         }catch(error){
            if(error.response.status === 400){
@@ -132,7 +132,7 @@ const Login = () => {
       justifyContent="space-between"
       minHeight="100vh"
     >
-      <Header hasHiddenAuthButtons={true} />
+      <Header hasHiddenAuthButtons />
       <Box className="content">
         <Stack spacing={2} className="form">
         <h2 className="title">Login</h2>
