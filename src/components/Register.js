@@ -6,12 +6,13 @@ import React, { useState } from "react";
 import { config } from "../App";
 import Footer from "./Footer";
 import Header from "./Header";
-import {Link} from "react-router-dom";
+import {useHistory, Link} from "react-router-dom";
 import "./Register.css";
 
 
 const Register = () => {
   const { enqueueSnackbar } = useSnackbar();
+  const history = useHistory();
   const formInit = {
     username: "",
     password: "",
@@ -55,6 +56,7 @@ const Register = () => {
         {
           setFormData(formInit);
           setLoadingState(false);
+          history.push("/login");
           return enqueueSnackbar("Registered Successfully",{
             variant: "success",
           });
@@ -130,7 +132,7 @@ const Register = () => {
       justifyContent="space-between"
       minHeight="100vh"
     >
-      <Header hasHiddenAuthButtons />
+      <Header hasHiddenAuthButtons={true} />
       <Box className="content">
         <Stack spacing={2} className="form">
           <h2 className="title">Register</h2>
@@ -143,20 +145,23 @@ const Register = () => {
             placeholder="Enter Username"
             fullWidth
             value={formData.username}
-            onChange={(e) => {setFormData({...formData, username: e.target.value})}}
-            
+            onChange={(e) => {
+              setFormData({ ...formData, username: e.target.value });
+            }}
           />
           <TextField
             id="password"
             variant="outlined"
             label="Password"
-            name="password"
+            name="Password"
             type="password"
             helperText="Password must be atleast 6 characters length"
             fullWidth
             placeholder="Enter a password with minimum 6 characters"
-            value={ formData.password }
-            onChange={(e) => setFormData({...formData,password: e.target.value})}
+            value={formData.password}
+            onChange={(e) => {
+              setFormData({ ...formData, password: e.target.value });
+            }}
           />
           <TextField
             id="confirmPassword"
@@ -164,24 +169,30 @@ const Register = () => {
             label="Confirm Password"
             name="confirmPassword"
             type="password"
+            value={formData.confirmPassword}
+            onChange={(e) => {
+              setFormData({ ...formData, confirmPassword: e.target.value });
+            }}
             fullWidth
-            value={ formData.confirmPassword }
-            onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
           />
-           {loading === true ? (
-           <Box>
+          {loading === true ? (
+            <Box sx={{ display: "flex" }}>
               <CircularProgress />
-           </Box>
-          ):(
-           <Button className="button" variant="contained" onClick={register}>
-            Register Now
-          </Button>
+            </Box>
+          ) : (
+            <Button
+              className="button"
+              variant="contained"
+              onClick={register}
+            >
+              Register Now
+            </Button>
           )}
           <p className="secondary-action">
             Already have an account?{" "}
-             <Link className="link" to="/login">
+            <Link className="link" to="/login">
               Login here
-             </Link>
+            </Link>
           </p>
         </Stack>
       </Box>
