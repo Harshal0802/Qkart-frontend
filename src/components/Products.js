@@ -153,7 +153,7 @@ const Products = () => {
       clearTimeout(debounceTimeout);
     }
     const timer = setTimeout(async () => {
-      performSearch(value);
+      await performSearch(value);
     }, 500);
     setDebounceTimeout(timer);
   };
