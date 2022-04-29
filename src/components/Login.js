@@ -19,6 +19,7 @@ const Login = () => {
   const [formData, setFormData] = useState(formInit);
   
   // TODO: CRIO_TASK_MODULE_LOGIN - Fetch the API response
+
   /**
    * Perform the Login API call
    * @param {{ username: string, password: string }} formData
@@ -104,6 +105,7 @@ const Login = () => {
   };
 
   // TODO: CRIO_TASK_MODULE_LOGIN - Persist user's login information
+
   /**
    * Store the login information so that it can be used to identify the user in subsequent API calls
    *

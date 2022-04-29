@@ -47,7 +47,8 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
             Back to explore
           </Button>
         </>  
-      ) : <>
+      ) : (
+      <>
       <Button 
         className="explore-button" 
         variant="text"
@@ -63,6 +64,7 @@ const Header = ({ children, hasHiddenAuthButtons }) => {
           Register
         </Button>
         </>  
+      ) 
       )}
       </Stack>
     </Box>
