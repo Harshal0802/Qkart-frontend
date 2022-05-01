@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "./components/Login";
 import Products from "./components/Products";
 import CheckOut from "./components/Checkout";
+import Thanks from "./components/Thanks";
 
 export const config = {
   endpoint: `https://qkart-frontend-harshal.herokuapp.com/api/v1`,
@@ -25,6 +26,9 @@ function App() {
               </Route>
               <Route path="/checkout">
                 <CheckOut />
+              </Route>
+              <Route path="/thanks">
+                <Thanks />
               </Route>
             </Switch>
           </Router>
