@@ -192,11 +192,14 @@ const Cart = ({ products, items = [], handleQuantity, isReadOnly }) => {
                         isReadOnly={isReadOnly}
                         value={item.qty}
                         handleAdd={async () =>
-                          // handleAddToCart={async () => {
-                          //   await addToCart(token, prod._id, items, 1, products, {
-                          //     preventDuplicate: true,
-                          //   });
-                          // }}
+                          // <ProductCard
+                          //    product={prod}
+                          //     handleAddToCart={async () => {
+                          //     await addToCart(token, prod._id, items, 1, products, {
+                          //       preventDuplicate: true,
+                          //     });
+                          //   }}
+                          // />
                           await handleQuantity(token,item.productId,items,item.qty+1,products)
                         }
                         handleDelete={async () =>

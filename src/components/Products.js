@@ -170,7 +170,6 @@ const Products = () => {
   };
 
   const addToCart = async (token, productId, items, qty, products, options = { preventDuplicate: false }) => {
-    console.log("message", token);
     if (!token) {
       enqueueSnackbar("Please Login to add item to cart", {
         variant: "warning",
