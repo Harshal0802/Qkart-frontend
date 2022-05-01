@@ -14,12 +14,20 @@ import Footer from "./Footer";
 import Header from "./Header";
 import "./Products.css";
 import ProductCard from "./ProductCard";
+import Cart, { generateCartItemsFrom } from "./Cart";
 
 // Definition of Data Structures used
 /**
  * @typedef {Object} Product - Data on product available to buy
  * 
  * @property {string} name - The name or title of the product
+
+
+/**
+ * @typedef {Object} CartItem -  - Data on product added to cart
+ * 
+ * @property {string} name - The name or title of the product in cart
+ * @property {string} qty - The quantity of product added to cart
  * @property {string} category - The category that the product belongs to
  * @property {number} cost - The price to buy the product
  * @property {number} rating - The aggregate rating of the product (integer out of five)
@@ -77,11 +85,10 @@ const Products = () => {
     setLoading(true);
 
     try {
-      const res = await axios.get(`${config.endpoint}/products`);
+      const response = await axios.get(`${config.endpoint}/products`);
       setLoading(false);
-      // console.log(res.data);
-      setProducts(res.data);
-      setFilteredProducts(res.data);
+      setProducts(response.data);
+      setFilteredProducts(response.data);
     } catch (e) {
       setLoading(false);
       if (e.response && e.response.status === 500) {
@@ -158,9 +165,79 @@ const Products = () => {
     setDebounceTimeout(timer);
   };
 
+  const isItemInCart = (items, productId) => {
+    return items.findIndex((item) => item.productId === productId) !== -1;
+  };
+
+  const addToCart = async (token, productId, items, qty, products, options = { preventDuplicate: false }) => {
+    console.log("message", token);
+    if (!token) {
+      enqueueSnackbar("Please Login to add item to cart", {
+        variant: "warning",
+      });
+      return;
+    }
+    if (options.preventDuplicate && isItemInCart(items, productId)) {
+      enqueueSnackbar(
+        "Item already in cart. Use the cart sidebar to update quantity or remove item.",
+        { variant: "warning" }
+      );
+      return;
+    }
+    try {
+      const response = await axios.post(`${config.endpoint}/cart`,
+        {
+          productId,
+          qty,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const cartItems = generateCartItemsFrom(response.data, products);
+      setItems(cartItems);
+    } catch (e) {
+      if (e.response) {
+        enqueueSnackbar(e.response.data.message, { variant: "error" });
+      } else {
+        enqueueSnackbar(
+          "Something went wrong. Check that the backend is running, reachable and returns valid JSON.",
+          { variant: "error" }
+        );
+      }
+    }
+  };
+
+  const fetchCart = async (token) => {
+    if (!token) return;
+    try {
+      const response = await axios.get(`${config.endpoint}/cart`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (e) {
+      enqueueSnackbar(
+        "Something went wrong. Check that the backend is running, reachable and returns valid JSON.",
+        { variant: "error" }
+      );
+      return null;
+    }
+  };
+
   useEffect(() => {
     performAPICall();
   }, []);
+
+
+  useEffect(() => {
+    fetchCart(token)
+      .then((cartData) => generateCartItemsFrom(cartData, products))
+      .then((cartItems) => setItems(cartItems));
+  }, [products]);
 
   return (
     <div>
@@ -204,7 +281,7 @@ const Products = () => {
       }}
     />
     <Grid container>
-      <Grid item className="product-grid">
+      <Grid item className="product-grid" md={token ? 9 : 12} >
         <Box className="hero">
           <p className="hero-heading">
             India’s <span className="hero-highlight">FASTEST DELIVERY</span>{" "}
@@ -222,6 +299,11 @@ const Products = () => {
                 <Grid item key={prod._id} xs={6} md={3} sm={6}>
                   <ProductCard
                     product={prod}
+                    handleAddToCart={async () => {
+                      await addToCart(token, prod._id, items, 1, products, {
+                        preventDuplicate: true,
+                      });
+                    }}
                   />
                 </Grid>
               ))
@@ -234,6 +316,15 @@ const Products = () => {
           </Grid>
         )}
       </Grid>
+      {token ? (
+          <Grid item xs={12} md={3} bgcolor="#E9F5E1">
+            <Cart
+              products={products}
+              items={items}
+              handleQuantity={addToCart}
+            />
+          </Grid>
+        ) : null}
     </Grid>
     <Footer />
   </div>
