@@ -16,26 +16,6 @@ import "./Products.css";
 import ProductCard from "./ProductCard";
 import Cart, { generateCartItemsFrom } from "./Cart";
 
-// Definition of Data Structures used
-/**
- * @typedef {Object} Product - Data on product available to buy
- * 
- * @property {string} name - The name or title of the product
-
-
-/**
- * @typedef {Object} CartItem -  - Data on product added to cart
- * 
- * @property {string} name - The name or title of the product in cart
- * @property {string} qty - The quantity of product added to cart
- * @property {string} category - The category that the product belongs to
- * @property {number} cost - The price to buy the product
- * @property {number} rating - The aggregate rating of the product (integer out of five)
- * @property {string} image - Contains URL for the product image
- * @property {string} _id - Unique ID for the product
- */
-
-
 const Products = () => {
   const token = localStorage.getItem("token");
   const [loading, setLoading] = useState(false);
